@@ -36,8 +36,8 @@ const OnboardingPage = () => {
   };
 
   const handleRandomAvatar = () => {
-    const idx = Math.floor(Math.random() * 4) + 1; // 1-5 included
-    const randomAvatar = `https://www.loremfaces.net/96/id/${idx}.jpg`;
+    const idx = Math.floor(Math.random() * 100) + 1; // 1-5 included
+    const randomAvatar = `https://avatarapi.runflare.run/public/${idx}`;
 
     setFormState({ ...formState, profilePic: randomAvatar});
     toast.success("Random profile generated!");
