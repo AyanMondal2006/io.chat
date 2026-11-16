@@ -3,12 +3,14 @@ import axios from "axios";
 // If VITE_API_URL is provided (e.g. on Vercel pointing to Render: https://your-backend.onrender.com/api), use it.
 // In local development, default to http://localhost:5001/api.
 // In production without VITE_API_URL, fallback to relative /api.
-const BASE_URL =
+const rawBaseUrl =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api");
 
+const cleanBaseUrl = rawBaseUrl.replace(/\/+$/, "");
+
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: cleanBaseUrl,
   withCredentials: true, // send cookies across origins
 });
 

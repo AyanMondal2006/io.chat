@@ -19,6 +19,7 @@ const configuredOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(
@@ -75,7 +76,7 @@ if (process.env.NODE_ENV === "production" && fs.existsSync(frontendDist)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT} and bound to 0.0.0.0`);
   connectDB();
 });
