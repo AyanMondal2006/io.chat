@@ -7,7 +7,12 @@ const rawBaseUrl =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api");
 
-const cleanBaseUrl = rawBaseUrl.replace(/\/+$/, "");
+let cleanBaseUrl = rawBaseUrl.replace(/\/+$/, "");
+
+// Automatically append /api if the user provided the base URL without /api
+if (!cleanBaseUrl.endsWith("/api")) {
+  cleanBaseUrl = `${cleanBaseUrl}/api`;
+}
 
 export const axiosInstance = axios.create({
   baseURL: cleanBaseUrl,

@@ -47,10 +47,15 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// API Routes
+// API Routes (supports both /api/auth and /auth)
 app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+
 app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
+
 app.use("/api/chat", chatRoutes);
+app.use("/chat", chatRoutes);
 
 // Health check endpoint for Render pinging / monitoring
 app.get("/api/health", (req, res) => {
