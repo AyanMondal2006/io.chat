@@ -1,136 +1,66 @@
-import React from 'react'
-import useAuthUser from '../hooks/useAuthUser.js'
-import { Link, useLocation } from 'react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logout } from '../lib/api.js';
-import { BellIcon, LogOutIcon, ShipWheelIcon } from 'lucide-react';
-import ThemeSelector from './ThemeSelector.jsx';
-import useLogout from '../hooks/useLogout.js';
+import { Link } from "react-router";
+import { Bell, Menu } from "lucide-react";
 
-const Navbar = () => {
-   const { authUser } = useAuthUser();
-   const location = useLocation();
-   const isChatPage = location.pathname?.startsWith("/chat");
-   
-  //  const queryClient = useQueryClient();
+import useAuthUser from "../hooks/useAuthUser.js";
+import ThemeSelector from "./ThemeSelector.jsx";
+import BrandLogo from "./BrandLogo.jsx";
 
-  // const {mutate:logoutMutation} = useMutation({
-  //   mutationFn: logout,
-  //   onSuccess: () => queryClient.infiniteQuery({queryKey: ["authUser"]})
-  // });
+const Navbar = ({ onToggleSidebar, showSidebarToggle = false }) => {
+  const { authUser } = useAuthUser();
 
-  const {logoutMutation} = useLogout();
-  
   return (
-    <nav className='bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-end w-full'>
-          {/* LOGO - ONLY IN THE CHAT PAGE */}
-          {isChatPage && (
-          <div className='pl-5'>
-            {/* <Link to="/" className="flex item-center gap-2.5">
-            <ShipWheelIcon className='size-9 test-primary'/>
-            <span className='text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r form-primary to-secondary tracking-wider'>
-                Streamify
-             </span>
-            </Link> */}
-            
-{/* Streamify logo and name */}
-<Link to="/" className="flex items-center gap-2.5 shrink-0">
-  <ShipWheelIcon className="size-9 text-primary" />
-  <span className="text-2xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
-    Streamify
-  </span>
-</Link>
-
-          </div>
-          )}
-
-          <div className='flex items-center gap-3 sm:gap-4 ml-auto'>
-            <Link to={"/notifications"}>
-              <button className='btn btn-ghost btn-circle'>
-                <BellIcon className='h-6 w-6 text-base-content opacity-70'/>
-              </button>
-            </Link>
-          </div>
-
-          <ThemeSelector/>
-          
-          <div className='avatar'>
-            <div className='w-9 rounded-full'>
-              <img src={authUser?.profilePic} alt='User Avatar' rel='noreferrer'/>
-            </div>
-          </div>
-
-          {/* Login button */}
-          <button  className='btn btn-ghost btn-cicle' onClick={logoutMutation}>
-            <LogOutIcon className='h-6 w-6 text-base-content opacity-70'/>
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-indigo-300/10 bg-[#0c1427]/95 px-4 backdrop-blur-xl sm:px-6">
+      <div className="flex min-w-0 items-center gap-3">
+        {showSidebarToggle && (
+          <button
+            type="button"
+            onClick={onToggleSidebar}
+            aria-label="Toggle sidebar"
+            title="Toggle sidebar"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/10 text-slate-300 transition hover:border-violet-400/40 hover:bg-violet-500/10 hover:text-white"
+          >
+            <Menu size={21} />
           </button>
-          </div>
+        )}
+
+        <BrandLogo size="md" />
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+        <Link
+          to="/notifications"
+          aria-label="Notifications"
+          title="Notifications"
+          className="relative flex size-10 items-center justify-center rounded-xl text-slate-300 transition hover:bg-white/5 hover:text-white"
+        >
+          <Bell size={20} />
+        </Link>
+
+        <ThemeSelector />
+
+        <div
+          className="flex size-9 items-center justify-center overflow-hidden rounded-full border border-violet-400/30 bg-indigo-950"
+          title={authUser?.fullName || "Your profile"}
+        >
+          {authUser?.profilePic ? (
+            <img
+              src={authUser.profilePic}
+              alt={authUser.fullName || "Your profile"}
+              className="size-full object-cover"
+            />
+          ) : (
+            <span className="font-semibold text-violet-200">
+              {(authUser?.fullName || "U")
+                .charAt(0)
+                .toUpperCase()}
+            </span>
+          )}
         </div>
-    </nav>
+      </div>
+    </header>
   );
 };
 
-export default Navbar
+export default Navbar;
 
 
-// import React from "react";
-// import useAuthUser from "../hooks/useAuthUser.js";
-// import { Link } from "react-router";
-// import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
-// import ThemeSelector from "./ThemeSelector.jsx";
-// import useLogout from "../hooks/useLogout.js";
-
-// const Navbar = () => {
-//   const { authUser } = useAuthUser();
-//   const { logoutMutation } = useLogout();
-
-//   return (
-//     <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
-//       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="flex items-center justify-between w-full">
-
-//           {/* Logo and app name on the left */}
-//           <Link to="/" className="flex items-center gap-2.5 shrink-0">
-//             <ShipWheelIcon className="size-9 text-primary" />
-//             <span className="text-2xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
-//               Streamify
-//             </span>
-//           </Link>
-
-//           {/* Navbar actions on the right */}
-//           <div className="flex items-center gap-2 sm:gap-4">
-//             <Link to="/notifications" aria-label="Notifications">
-//               <button className="btn btn-ghost btn-circle">
-//                 <BellIcon className="h-6 w-6 text-base-content opacity-70" />
-//               </button>
-//             </Link>
-
-//             <ThemeSelector />
-
-//             <div className="avatar">
-//               <div className="w-9 rounded-full">
-//                 <img
-//                   src={authUser?.profilePic}
-//                   alt="User Avatar"
-//                 />
-//               </div>
-//             </div>
-
-//             <button
-//               className="btn btn-ghost btn-circle"
-//               onClick={logoutMutation}
-//               aria-label="Log out"
-//             >
-//               <LogOutIcon className="h-6 w-6 text-base-content opacity-70" />
-//             </button>
-//           </div>
-
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;

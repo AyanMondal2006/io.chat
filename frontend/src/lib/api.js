@@ -14,15 +14,12 @@ export const logout = async () => {
   return response.data;
 };
 
+
 export const getAuthUser = async () => {
-  try {
-    const res = await axiosInstance.get("/auth/me");
-    return res.data;
-  } catch (error) {
-    console.log("Error in getAuthUser:", error);
-    return null;
-  }
+  const response = await axiosInstance.get("/auth/me");
+  return response.data;
 };
+
 
 export const completeOnboarding = async (userData) => {
   const response = await axiosInstance.post("/auth/onboarding", userData);
@@ -61,5 +58,21 @@ export async function acceptFriendRequest(requestId) {
 
 export async function getStreamToken() {
   const response = await axiosInstance.get("/chat/token");
+  return response.data;
+}
+
+export async function translateMessage(text, target = "hi") {
+  const response = await axiosInstance.post("/chat/translate", {
+    text,
+    target,
+  });
+
+  return response.data;
+}
+export async function correctEnglishMessage(text) {
+  const response = await axiosInstance.post("/chat/correct", {
+    text,
+  });
+
   return response.data;
 }

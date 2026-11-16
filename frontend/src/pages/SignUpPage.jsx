@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import { ShipWheelIcon } from "lucide-react";
-import {Link} from "react-router";
-import { QueryClient, useQueryClient, useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "../lib/axios";
-import { signup } from "../lib/api.js";
+import { useState } from "react";
+import { Link } from "react-router";
 import useSignUp from "../hooks/useSignUp.js";
+import BrandLogo from "../components/BrandLogo.jsx";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -12,14 +9,8 @@ const SignUpPage = () => {
     email: "",
     password: "",
   });
-  // This is how we did it first version, without using our custom hook
-  // const queryClient = useQueryClient();
-  // const { mutate:signupMutation, isPending, error} = useMutation({
-  //     mutationFn: signup,
-  //     onSuccess: () => queryClient.invalidateQueries({ queryKey : ["authUser"] }),
-  // });
 
-  const {isPending, error, signupMutation} = useSignUp();
+  const { isPending, error, signupMutation } = useSignUp();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -28,50 +19,44 @@ const SignUpPage = () => {
 
   return (
     <div
-      className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
+      className="flex min-h-screen items-center justify-center p-4 sm:p-6 md:p-8"
       data-theme="forest"
     >
-      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
+      <div className="flex w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-base-100 shadow-2xl lg:flex-row">
         {/* SIGNUP FORM - LEFT SIDE */}
+        <div className="flex w-full flex-col p-6 sm:p-10 lg:w-1/2">
+          {/* BRAND LOGO */}
+          <div className="mb-6 flex items-center justify-start">
+            <BrandLogo size="lg" withLink={false} />
+          </div>
 
-        <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
-          {/* LOGO */}
-          <div className="mb-4 flex items-center justify-start gap-2">
-            <ShipWheelIcon className="size-9 text-primary" />
-            <span
-              className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r
-         from-primary to-secondary tracking-wider"
-            >
-              Streamify
-            </span>
-          </div>
-        
-        {/* ERROR MESSAGE IF ANY */}
-        {error && (
-          <div className="alert alert-error mb-4">
-              <span>{error.response.data.message}</span>
-          </div>
-        )}
+          {/* ERROR MESSAGE IF ANY */}
+          {error && (
+            <div className="alert alert-error mb-4 rounded-xl">
+              <span>{error.response?.data?.message || "An error occurred"}</span>
+            </div>
+          )}
 
           <div className="w-full">
             <form onSubmit={handleSignup}>
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold">Create an Account</h2>
-                  <p className="text-sm opacity-70">
-                    Join Streamify and start your language learning adventure!
+                  <h2 className="text-2xl font-bold tracking-tight text-white">Create an Account</h2>
+                  <p className="mt-1 text-sm text-base-content/70">
+                    Join io.chat and start your real-time conversation adventure!
                   </p>
                 </div>
+
                 <div className="space-y-3">
                   {/* FULLNAME */}
-                  <div className="form-control w-full">
+                  <div className="form-control w-full space-y-1.5">
                     <label className="label">
-                      <span className="label-text">Full Name</span>
+                      <span className="label-text font-medium">Full Name</span>
                     </label>
                     <input
                       type="text"
                       placeholder="John Doe"
-                      className="input input-bordered w-full"
+                      className="input input-bordered w-full rounded-xl focus:border-primary focus:outline-none"
                       value={signupData.fullName}
                       onChange={(e) =>
                         setSignupData({
@@ -82,15 +67,16 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
+
                   {/* EMAIL */}
-                  <div className="form-control w-full">
+                  <div className="form-control w-full space-y-1.5">
                     <label className="label">
-                      <span className="label-text">Email</span>
+                      <span className="label-text font-medium">Email</span>
                     </label>
                     <input
                       type="email"
-                      placeholder="John@gmail.com"
-                      className="input input-bordered w-full"
+                      placeholder="john@example.com"
+                      className="input input-bordered w-full rounded-xl focus:border-primary focus:outline-none"
                       value={signupData.email}
                       onChange={(e) =>
                         setSignupData({ ...signupData, email: e.target.value })
@@ -98,76 +84,84 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
-                   {/* PASSWORD */}
-                  <div className="form-control w-full">
+
+                  {/* PASSWORD */}
+                  <div className="form-control w-full space-y-1.5">
                     <label className="label">
-                      <span className="label-text">Password</span>
+                      <span className="label-text font-medium">Password</span>
                     </label>
                     <input
                       type="password"
-                      placeholder="********"
-                      className="input input-bordered w-full"
+                      placeholder="••••••••"
+                      className="input input-bordered w-full rounded-xl focus:border-primary focus:outline-none"
                       value={signupData.password}
                       onChange={(e) =>
                         setSignupData({ ...signupData, password: e.target.value })
                       }
                       required
                     />
-                    <p className="text-xs opacity-70 mt-1">
+                    <p className="mt-1 text-xs text-base-content/60">
                       Password must be at least 6 characters long
                     </p>
                   </div>
 
-                <div className="form-control">
-                  <label className="label curser-pointer justify-start gap-2">
-                    <input type="checkbox" className="checkbox checkbox-sm" required/>
-                    <span className="text-xs leading-tight">
-                      I agree to the{" "}
-                      <span className="text-primary hover:underline">terms of service</span> and{" "}
-                      <span className="text-primary hover:underline">privacy policy</span>
-                    </span>
-                  </label>
+                  <div className="form-control pt-1">
+                    <label className="label cursor-pointer justify-start gap-2.5">
+                      <input type="checkbox" className="checkbox checkbox-primary checkbox-sm rounded-md" required />
+                      <span className="text-xs leading-tight text-base-content/75">
+                        I agree to the{" "}
+                        <span className="text-primary hover:underline">terms of service</span> and{" "}
+                        <span className="text-primary hover:underline">privacy policy</span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
-                </div>
-                <button className="btn btn-primary w-full" type="submit">
+
+                <button
+                  className="btn btn-primary mt-2 w-full rounded-xl font-semibold shadow-md shadow-primary/20"
+                  type="submit"
+                  disabled={isPending}
+                >
                   {isPending ? (
                     <>
-                     <span className="loading loading-spinner loading-xs"></span>
-                     Loading...
+                      <span className="loading loading-spinner loading-xs"></span>
+                      Creating account...
                     </>
                   ) : (
                     "Create Account"
                   )}
                 </button>
-                <div className="text-center mt-4">
-                   <p className="text-sm">
+
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-base-content/70">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-primary hover:underline">
+                    <Link to="/login" className="font-semibold text-primary hover:underline">
                       Sign in
                     </Link>
-                   </p>
+                  </p>
                 </div>
               </div>
             </form>
           </div>
         </div>
+
         {/* SIGNUP FORM - RIGHT SIDE */}
-        <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
-           <div className="max-w-md p-8">
-            {/* Illustration */}
-           <div className="relative aspect-square max-w-sm mx-auto">
-               <img src="/i.png" alt="Language connection illustration" className="w-full h-full"></img>
-           </div>
+        <div className="hidden w-full items-center justify-center bg-gradient-to-br from-primary/15 via-base-200/50 to-secondary/10 p-8 lg:flex lg:w-1/2">
+          <div className="max-w-md text-center">
+            <div className="relative mx-auto aspect-square max-w-sm drop-shadow-xl">
+              <img src="/i.png" alt="io.chat connection illustration" className="h-full w-full object-contain" />
+            </div>
 
-           <div className="text-current space-y-3 mt-6">
-              <h2 className="text-xl font-semibold">Connect with language partners worldwide</h2>
-              <p className="opacity-70">
-                Practice conversations, make friends, and improve your language skills together
+            <div className="mt-6 space-y-3">
+              <h2 className="text-2xl font-bold tracking-tight text-white">
+                Connect with partners worldwide
+              </h2>
+              <p className="text-sm text-base-content/70">
+                Practice conversations, make friends, and enhance your real-time communication on io.chat.
               </p>
-           </div>
-           </div>
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
   );
