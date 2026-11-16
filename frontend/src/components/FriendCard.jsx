@@ -1,7 +1,7 @@
-import { LANGUAGE_TO_FLAG } from "../constants";
 import { Link } from "react-router";
 import { MessageCircleIcon } from "lucide-react";
 import { capitialize } from "../lib/utils.js";
+import { getLanguageFlag } from "../lib/flags.jsx";
 
 const FriendCard = ({ friend }) => {
   return (
@@ -29,16 +29,22 @@ const FriendCard = ({ friend }) => {
 
       <div className="my-4 h-px bg-base-300" />
 
-      <div className="flex flex-wrap gap-2">
-        <span className="badge badge-secondary badge-outline gap-1 px-2 py-3">
-          {getLanguageFlag(friend.nativeLanguage)}
-          Native: {capitialize(friend.nativeLanguage)}
-        </span>
+      <div className="space-y-2 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-base-content/60">Native</span>
+          <span className="flex items-center gap-1.5 font-medium">
+            {getLanguageFlag(friend.nativeLanguage)}
+            <span>{capitialize(friend.nativeLanguage || "Unknown")}</span>
+          </span>
+        </div>
 
-        <span className="badge badge-outline gap-1 px-2 py-3">
-          {getLanguageFlag(friend.learningLanguage)}
-          Learning: {capitialize(friend.learningLanguage)}
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-base-content/60">Learning</span>
+          <span className="flex items-center gap-1.5 font-medium">
+            {getLanguageFlag(friend.learningLanguage)}
+            <span>{capitialize(friend.learningLanguage || "Unknown")}</span>
+          </span>
+        </div>
       </div>
 
       <Link
@@ -53,25 +59,3 @@ const FriendCard = ({ friend }) => {
 };
 
 export default FriendCard;
-
-export function getLanguageFlag(language) {
-  if (!language) return null;
-
-  const langLower = language.toLowerCase();
-  const countryCode = LANGUAGE_TO_FLAG[langLower];
-
-  if (countryCode) {
-    return (
-      <img
-        src={`https://flagcdn.com/24x18/${countryCode}.png`}
-        alt={`${langLower} flag`}
-        className="inline-block h-3 w-4 rounded-sm object-cover"
-        loading="lazy"
-      />
-    );
-  }
-
-  return null;
-}
-
-

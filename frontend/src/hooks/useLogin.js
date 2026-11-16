@@ -1,16 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React from 'react'
 import { login } from '../lib/api.js';
 
 const useLogin = () => {
-const queryClient = useQueryClient();
-const 
-  { mutate, isPending, error} = useMutation({
-      mutationFn:login,
-      onSuccess:()=>queryClient.invalidateQueries({queryKey:["authUser"]}),
-     });
+  const queryClient = useQueryClient();
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      if (data?.token) {
+        localStorage.setItem("iochat_token", data.token);
+      }
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+  });
 
-     return { error, isPending, loginMutation : mutate}
+  return { error, isPending, loginMutation: mutate };
 };
 
-export default useLogin
+export default useLogin;

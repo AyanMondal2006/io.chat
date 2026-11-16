@@ -140,7 +140,6 @@ const {
   data: tokenData,
   isPending: tokenLoading,
   isError: tokenError,
-  error: tokenErrorDetails,
   refetch: refetchToken,
 } = useQuery({
   queryKey: ["streamToken"],

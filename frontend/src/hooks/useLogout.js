@@ -11,6 +11,7 @@ const useLogout = () => {
   } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
+      localStorage.removeItem("iochat_token");
       queryClient.setQueryData(["authUser"], null);
       queryClient.removeQueries({
         predicate: (query) =>

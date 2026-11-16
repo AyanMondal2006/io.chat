@@ -21,8 +21,9 @@ export const translateMessage = async (req, res) => {
       });
     }
 
-    const baseUrl =
-      process.env.LIBRETRANSLATE_URL || "https://streamify-libretranslate-2.onrender.com/";
+    const rawBaseUrl =
+      process.env.LIBRETRANSLATE_URL || "https://streamify-libretranslate-2.onrender.com";
+    const baseUrl = rawBaseUrl.replace(/\/+$/, "");
 
     const response = await fetch(`${baseUrl}/translate`, {
       method: "POST",

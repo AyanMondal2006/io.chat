@@ -10,7 +10,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { getUserFriends } from "../lib/api.js";
-import { getLanguageFlag } from "../components/FriendCard.jsx";
+import { getLanguageFlag } from "../lib/flags.jsx";
 import { capitialize } from "../lib/utils.js";
 
 const ChatDashboardPage = () => {

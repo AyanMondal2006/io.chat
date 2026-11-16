@@ -11,7 +11,7 @@ import {
 import useLogout from "../hooks/useLogout.js";
 import BrandLogo from "./BrandLogo.jsx";
 
-const Sidebar = ({ expanded, onToggle }) => {
+const Sidebar = ({ expanded }) => {
   const { authUser } = useAuthUser();
   const location = useLocation();
   const { logoutMutation, isPending } = useLogout();
@@ -27,12 +27,12 @@ const Sidebar = ({ expanded, onToggle }) => {
       to: "/",
       active: isHome,
     },
-{
-  label: "Chat",
-  icon: MessageCircle,
-  to: "/chat",
-  active: location.pathname.startsWith("/chat"),
-},
+    {
+      label: "Chat",
+      icon: MessageCircle,
+      to: "/chat",
+      active: isChat,
+    },
     {
       label: "Notifications",
       icon: Bell,

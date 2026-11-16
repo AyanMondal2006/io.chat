@@ -18,8 +18,8 @@ import {
   XIcon,
 } from "lucide-react";
 import { Link } from "react-router";
-import FriendCard, { getLanguageFlag } from "../components/FriendCard";
-import NoFriendsFound from "../components/NoFriendsFound";
+import FriendCard from "../components/FriendCard";
+import { getLanguageFlag } from "../lib/flags.jsx";
 import { capitialize } from "../lib/utils.js";
 
 const HomePage = () => {
