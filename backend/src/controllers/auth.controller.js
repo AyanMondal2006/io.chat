@@ -2,7 +2,7 @@ import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
-const AVATAR_API_URL = "https://avatar-api-lemon.vercel.app";
+const AVATAR_API_URL = "https://avatar-api-seven.vercel.app";
 
 // Get a random avatar from your Avatar API
 async function getRandomAvatar() {

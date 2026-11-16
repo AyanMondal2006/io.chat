@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { LANGUAGES } from '../constants/index.js';
 
-const AVATAR_API_URL = 'https://avatar-api-lemon.vercel.app';
+const AVATAR_API_URL = 'https://avatar-api-seven.vercel.app';
 
 const OnboardingPage = () => {
   const { authUser } = useAuthUser();
