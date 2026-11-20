@@ -95,9 +95,6 @@ STREAM_API_SECRET=<your-stream-api-secret>
 CLIENT_URL=http://localhost:5173
 FRONTEND_URL=http://localhost:5173
 
-# Optional: Translation Microservice (default fallback works out of the box)
-LIBRETRANSLATE_URL=https://streamify-libretranslate-2.onrender.com
-```
 
 ### 4.2. Frontend Configuration (`frontend/.env`)
 Create a file named `.env` inside the `frontend` directory:
