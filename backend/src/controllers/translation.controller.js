@@ -22,7 +22,7 @@ export const translateMessage = async (req, res) => {
     }
 
     const rawBaseUrl =
-      process.env.LIBRETRANSLATE_URL || "https://streamify-libretranslate-2.onrender.com";
+      process.env.LIBRETRANSLATE_URL || "https://streamify-libretranslate.onrender.com";
     const baseUrl = rawBaseUrl.replace(/\/+$/, "");
 
     const response = await fetch(`${baseUrl}/translate`, {
