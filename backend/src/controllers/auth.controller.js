@@ -4,23 +4,41 @@ import jwt from "jsonwebtoken";
 
 const AVATAR_API_URL = "https://avatar-api-seven.vercel.app";
 
-// Get a random avatar from your Avatar API
+// Get a random avatar from your Avatar API with robust fallback
 async function getRandomAvatar() {
-    const response = await fetch(
-        `${AVATAR_API_URL}/api/avatars/random`
-    );
+    try {
+        const response = await fetch(
+            `${AVATAR_API_URL}/api/avatars/random`,
+            { signal: AbortSignal.timeout(6000) }
+        );
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch random avatar");
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.avatar?.imageUrl) {
+                return data.avatar.imageUrl;
+            }
+        }
+    } catch (error) {
+        console.warn("External Avatar API unavailable, using fallback:", error.message);
     }
 
-    const data = await response.json();
+    // High quality deterministic/random fallback avatar
+    const randomSeed = Math.random().toString(36).substring(7);
+    return `https://api.dicebear.com/7.x/adventurer/svg?seed=${randomSeed}`;
+}
 
-    if (!data.success || !data.avatar?.imageUrl) {
-        throw new Error("Invalid response from Avatar API");
+export async function getRandomAvatarHandler(req, res) {
+    try {
+        const avatarUrl = await getRandomAvatar();
+        res.status(200).json({ success: true, avatarUrl });
+    } catch (error) {
+        console.error("Error in getRandomAvatarHandler:", error.message);
+        const randomSeed = Math.random().toString(36).substring(7);
+        res.status(200).json({
+            success: true,
+            avatarUrl: `https://api.dicebear.com/7.x/adventurer/svg?seed=${randomSeed}`,
+        });
     }
-
-    return data.avatar.imageUrl;
 }
 
 export async function signup(req, res) {

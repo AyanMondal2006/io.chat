@@ -1,5 +1,5 @@
 import express from "express"
-import { signup, logout, login, onboard } from "../controllers/auth.controller.js";
+import { signup, logout, login, onboard, getRandomAvatarHandler } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router =  express.Router();
@@ -7,6 +7,7 @@ const router =  express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
+router.get("/random-avatar", getRandomAvatarHandler);
 
 router.post("/onboarding", protectRoute ,onboard);
 

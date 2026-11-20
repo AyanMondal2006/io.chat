@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useAuthUser from '../hooks/useAuthUser';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { completeOnboarding } from '../lib/api.js';
+import { completeOnboarding, getRandomAvatar } from '../lib/api.js';
 import {
   LoaderIcon,
   CameraIcon,
@@ -11,8 +11,6 @@ import {
   ShipWheelIcon
 } from 'lucide-react';
 import { LANGUAGES } from '../constants/index.js';
-
-const AVATAR_API_URL = 'https://avatar-api-seven.vercel.app';
 
 const OnboardingPage = () => {
   const { authUser } = useAuthUser();
@@ -49,36 +47,32 @@ const OnboardingPage = () => {
     onboardingMutation(formState);
   };
 
-  // Generate a random avatar using your deployed Avatar API
+  // Generate a random avatar through backend proxy with reliable fallback
   const handleRandomAvatar = async () => {
     try {
       setIsAvatarLoading(true);
 
-      const response = await fetch(
-        `${AVATAR_API_URL}/api/avatars/random`
-      );
+      const data = await getRandomAvatar();
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch random avatar');
+      if (data?.avatarUrl) {
+        setFormState((prev) => ({
+          ...prev,
+          profilePic: data.avatarUrl,
+        }));
+        toast.success('Random avatar generated!');
+      } else {
+        throw new Error('No avatar returned from server');
       }
-
-      const data = await response.json();
-
-      if (!data.success || !data.avatar?.imageUrl) {
-        throw new Error('Invalid Avatar API response');
-      }
+    } catch (error) {
+      console.warn('Backend avatar endpoint failed, using client fallback:', error);
+      const randomSeed = Math.random().toString(36).substring(7);
+      const fallbackUrl = `https://api.dicebear.com/7.x/adventurer/svg?seed=${randomSeed}`;
 
       setFormState((prev) => ({
         ...prev,
-        profilePic: data.avatar.imageUrl,
+        profilePic: fallbackUrl,
       }));
-
       toast.success('Random avatar generated!');
-
-    } catch (error) {
-      console.error('Avatar API error:', error);
-      toast.error('Unable to generate avatar. Please try again.');
-
     } finally {
       setIsAvatarLoading(false);
     }

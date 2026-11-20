@@ -26,6 +26,11 @@ export const completeOnboarding = async (userData) => {
   return response.data;
 };
 
+export const getRandomAvatar = async () => {
+  const response = await axiosInstance.get("/auth/random-avatar");
+  return response.data;
+};
+
 export async function getUserFriends() {
   const response = await axiosInstance.get("/users/friends");
   return response.data;

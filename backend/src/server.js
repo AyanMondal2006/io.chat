@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 // Allowed origins for CORS (local dev, custom domain, Vercel deployments)
 const configuredOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
+  "http://localhost:5174",
   process.env.CLIENT_URL,
   process.env.FRONTEND_URL,
 ].filter(Boolean);
@@ -28,17 +28,19 @@ app.use(
       // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
 
-      // Check if origin matches configured list or any Vercel domain
+      // Check if origin matches configured list, any Vercel domain, or any local dev port
       const isAllowed =
         configuredOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app");
+        origin.endsWith(".vercel.app") ||
+        /^http:\/\/localhost:[0-9]+$/.test(origin) ||
+        /^http:\/\/127\.0\.0\.1:[0-9]+$/.test(origin);
 
       if (isAllowed) {
         return callback(null, true);
       }
 
       console.warn(`[CORS] Blocked request from origin: ${origin}`);
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
+      return callback(null, false);
     },
     credentials: true, // Allow cookies across origins
   })
